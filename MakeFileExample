@@ -1,0 +1,22 @@
+build:
+	@go build -o bin/go-nextjs-template cmd/main.go
+
+test: build
+	@go test -v ./...
+
+run: build
+	@./bin/go-nextjs-template
+
+migrate-create:
+	@goose -dir ./cmd/migrations create $(filter-out $@,$(MAKECMDGOALS)) sql
+
+migrate-up:
+	@goose -dir ./cmd/sql/migrations mysql "username:password@tcp(port_number)/db_name" up
+
+migrate-down:
+	@goose -dir ./cmd/sql/migrations mysql "username:password@tcp(port_number)/db_name" down
+
+migrate-status:
+	@goose -dir ./cmd/sql/migrations mysql "username:password@tcp(port_number)/db_name" status
+
+

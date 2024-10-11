@@ -8,7 +8,7 @@ run: build
 	@./bin/go-nextjs-template
 
 migrate-create:
-	@goose -dir ./cmd/migrations create $(filter-out $@,$(MAKECMDGOALS)) sql
+	@goose -dir ./cmd/sql/migrations create $(filter-out $@,$(MAKECMDGOALS)) sql
 
 migrate-up:
 	@goose -dir ./cmd/sql/migrations mysql "username:password@tcp(port_number)/db_name" up

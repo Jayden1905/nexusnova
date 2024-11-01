@@ -6,7 +6,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/jayden1905/go-nextjs-template/cmd/pkg/database"
+	"github.com/jayden1905/nexusnova/cmd/pkg/database"
+	"github.com/jayden1905/nexusnova/types"
 )
 
 type Store struct {
@@ -32,7 +33,7 @@ func (s *Store) GetUserByEmail(email string) (*database.User, error) {
 }
 
 // GetUserByID fetches a user by ID from the database
-func (s *Store) GetUserByID(id uint32) (*database.User, error) {
+func (s *Store) GetUserByID(id int32) (*database.User, error) {
 	user, err := s.db.GetUserByID(context.Background(), id)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -45,7 +46,7 @@ func (s *Store) GetUserByID(id uint32) (*database.User, error) {
 }
 
 // CreateUser creates a new user in the database
-func (s *Store) CreateUser(ctx context.Context, user *database.User) error {
+func (s *Store) CreateUser(ctx context.Context, user *types.User) error {
 	err := s.db.CreateUser(ctx, database.CreateUserParams{
 		FirstName: user.FirstName,
 		LastName:  user.LastName,

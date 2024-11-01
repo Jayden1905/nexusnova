@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/jayden1905/go-nextjs-template/cmd/pkg/database"
+	"github.com/jayden1905/nexusnova/cmd/pkg/database"
 )
 
 type User struct {
@@ -19,8 +19,8 @@ type User struct {
 
 type UserStore interface {
 	GetUserByEmail(email string) (*database.User, error)
-	GetUserByID(id uint32) (*database.User, error)
-	CreateUser(ctx context.Context, user *database.User) error
+	GetUserByID(id int32) (*database.User, error)
+	CreateUser(ctx context.Context, user *User) error
 }
 
 type RegisterUserPayload struct {
@@ -37,12 +37,12 @@ type LoginUserPayload struct {
 
 func DatabaseUserToUser(u *database.User) *User {
 	return &User{
-		ID:        int(u.ID),
+		ID:        int(u.UserID),
 		FirstName: u.FirstName,
 		LastName:  u.LastName,
 		Email:     u.Email,
 		Password:  u.Password,
-		CreatedAt: u.Createdat,
-		UpdatedAt: u.Updatedat,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
 	}
 }

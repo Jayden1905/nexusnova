@@ -6,9 +6,9 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 
-	"github.com/jayden1905/go-nextjs-template/cmd/api"
-	"github.com/jayden1905/go-nextjs-template/config"
-	"github.com/jayden1905/go-nextjs-template/db"
+	"github.com/jayden1905/nexusnova/cmd/api"
+	"github.com/jayden1905/nexusnova/config"
+	"github.com/jayden1905/nexusnova/db"
 )
 
 func main() {

@@ -9,6 +9,7 @@ import (
 
 	"github.com/jayden1905/nexusnova/cmd/pkg/database"
 	"github.com/jayden1905/nexusnova/config"
+	"github.com/jayden1905/nexusnova/service/email"
 	"github.com/jayden1905/nexusnova/service/user"
 )
 
@@ -37,9 +38,12 @@ func (s *apiConfig) Run() error {
 	// Define the api group
 	api := app.Group("/api/v1")
 
+	// Email service
+	mailer := email.NewEmailService()
+
 	// Define the user store and handler
 	userStore := user.NewStore(s.db)
-	userHandler := user.NewHandler(userStore)
+	userHandler := user.NewHandler(userStore, mailer)
 
 	// Register the user routes
 	userHandler.RegisterRoutes(api)

@@ -19,6 +19,21 @@ func NewStore(db *database.Queries) *Store {
 	return &Store{db: db}
 }
 
+// CreateUser creates a new user in the database
+func (s *Store) CreateUser(ctx context.Context, user *types.User) error {
+	err := s.db.CreateUser(ctx, database.CreateUserParams{
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Password:  user.Password,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetUserByEmail fetches a user by email from the database
 func (s *Store) GetUserByEmail(email string) (*database.User, error) {
 	user, err := s.db.GetUserByEmail(context.Background(), email) // Use the SQLC-generated method
@@ -43,19 +58,4 @@ func (s *Store) GetUserByID(id int32) (*database.User, error) {
 	}
 
 	return &user, nil
-}
-
-// CreateUser creates a new user in the database
-func (s *Store) CreateUser(ctx context.Context, user *types.User) error {
-	err := s.db.CreateUser(ctx, database.CreateUserParams{
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-		Email:     user.Email,
-		Password:  user.Password,
-	})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

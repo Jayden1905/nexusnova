@@ -5,8 +5,53 @@
 package database
 
 import (
+	"database/sql"
+	"database/sql/driver"
+	"fmt"
 	"time"
 )
+
+type UsersRole string
+
+const (
+	UsersRoleAdmin UsersRole = "admin"
+	UsersRoleUser  UsersRole = "user"
+)
+
+func (e *UsersRole) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = UsersRole(s)
+	case string:
+		*e = UsersRole(s)
+	default:
+		return fmt.Errorf("unsupported scan type for UsersRole: %T", src)
+	}
+	return nil
+}
+
+type NullUsersRole struct {
+	UsersRole UsersRole
+	Valid     bool // Valid is true if UsersRole is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullUsersRole) Scan(value interface{}) error {
+	if value == nil {
+		ns.UsersRole, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.UsersRole.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullUsersRole) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.UsersRole), nil
+}
 
 type User struct {
 	UserID    int32
@@ -14,6 +59,16 @@ type User struct {
 	LastName  string
 	Email     string
 	Password  string
+	Verify    bool
+	Role      UsersRole
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+type UserCustomField struct {
+	ID         int32
+	UserID     int32
+	FieldName  sql.NullString
+	FieldValue sql.NullString
+	FieldType  sql.NullString
 }

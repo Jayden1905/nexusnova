@@ -41,7 +41,7 @@ func (q *Queries) DeleteUser(ctx context.Context, userID int32) error {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT user_id, first_name, last_name, email, password, created_at, updated_at FROM users WHERE email = ?
+SELECT user_id, first_name, last_name, email, password, verify, role, created_at, updated_at FROM users WHERE email = ?
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -53,6 +53,8 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.LastName,
 		&i.Email,
 		&i.Password,
+		&i.Verify,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -60,7 +62,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT user_id, first_name, last_name, email, password, created_at, updated_at FROM users WHERE user_id = ?
+SELECT user_id, first_name, last_name, email, password, verify, role, created_at, updated_at FROM users WHERE user_id = ?
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, userID int32) (User, error) {
@@ -72,6 +74,8 @@ func (q *Queries) GetUserByID(ctx context.Context, userID int32) (User, error) {
 		&i.LastName,
 		&i.Email,
 		&i.Password,
+		&i.Verify,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
